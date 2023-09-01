@@ -1,0 +1,5 @@
+material_backend/material_backend/__pycache__/
+material_backend/materials/__pycache__/
+material_backend/materials/management/commands/__pycache__/
+__pycache__/
+material_backend/materials/__pycache__/
