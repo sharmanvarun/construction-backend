@@ -98,3 +98,7 @@ class MaterialDetail(generics.RetrieveUpdateDestroyAPIView):
 #             },
 #         },
 #     )
+
+class MaterialUpdateAmount(generics.UpdateAPIView):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
