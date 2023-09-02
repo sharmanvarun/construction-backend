@@ -13,3 +13,7 @@ class MaterialList(generics.ListCreateAPIView):
 class MaterialDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+
+class MaterialUpdateAmount(generics.UpdateAPIView):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
