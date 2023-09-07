@@ -39,7 +39,6 @@ class MaterialUpdateAmount(generics.UpdateAPIView):
     def broadcast_update(self, material_id, new_amount):
         # Get the channel layer
         channel_layer = get_channel_layer()
-
         # Construct the message to send to clients
         message = {
             'type': 'update_material_amount',
@@ -48,4 +47,4 @@ class MaterialUpdateAmount(generics.UpdateAPIView):
         }
 
         # Send the message to a custom channel group for broadcasting
-        async_to_sync(channel_layer.group_send)("material_updates", message)
+        async_to_sync(channel_layer.group_send)("update_material_amount", message)

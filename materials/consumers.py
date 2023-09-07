@@ -10,18 +10,18 @@ class MaterialConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         pass
 
-    async def update_amount(self, event):
+    async def update_material_amount(self, event):
         material_id = event['material_id']
         new_amount = event['new_amount']
 
-        await self.send(json.dumps({
+        await self.send_json({
             'material_id': material_id,
             'new_amount': new_amount,
-        }))
+        })
 
     @staticmethod
     @async_to_sync
-    def update_material_amount(material_id, new_amount):
+    def update_material_amount_db(material_id, new_amount):
         material = Material.objects.get(pk=material_id)
         material.amount = new_amount
         material.save()
@@ -32,18 +32,22 @@ class MaterialConsumer(AsyncWebsocketConsumer):
         new_amount = data['new_amount']
 
         # Update the amount in the database
-        self.update_material_amount(material_id, new_amount)
+        self.update_material_amount_db(material_id, new_amount)
 
-        # Send the updated data to all connected clients
+        # Send the updated data to all connected clients in the group
         await self.channel_layer.group_add(
             str(material_id),
             self.channel_name
         )
 
-        await self.send(json.dumps({
-            'material_id': material_id,
-            'new_amount': new_amount,
-        }))
+        await self.channel_layer.group_send(
+            str(material_id),
+            {
+                'type': 'update_material_amount',
+                'material_id': material_id,
+                'new_amount': new_amount,
+            }
+        )
 
         await self.channel_layer.group_discard(
             str(material_id),
