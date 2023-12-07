@@ -1,0 +1,20 @@
+# Use the official Node.js image as a starting point
+FROM node:14
+
+# Set the working directory within the container
+WORKDIR /app
+
+# Clone the frontend code from GitHub
+RUN git clone https://github.com/sharmanvarun/construction-frontend .
+
+# Copy the package.json and package-lock.json files to the working directory
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm install
+
+# Expose port 3000 for the React development server
+EXPOSE 3000
+
+# Start the React app
+CMD ["npm", "start"]
